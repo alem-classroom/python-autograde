@@ -67,10 +67,10 @@ do
     last="$?"
     set -e
     if [[ $last -eq 0 ]]; then
-        printf "✅ $LESSON_NAME-$TEST ALL TESTS PASSED\n"
+        printf "✅ $LESSON_NAME-$TEST passed\n"
         send_result $API_KEY $GITHUB_ACTOR $LESSON_NAME-$TEST "done"
     else
-        printf "🚫 TEST FAILED\n"
+        printf "🚫 $LESSON_NAME-$TEST failed\n"
     fi
 
 done
