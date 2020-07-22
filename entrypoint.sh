@@ -30,6 +30,10 @@ USER_KEY=$3
 echo $GITHUB_SHA
 echo $GITHUB_RUN_ID
 echo "LOOOL"
+echo $GITHUB_RUN_NUMBER "run number"
+echo $GITHUB_JOB "job"
+env
+
 
 export INPUT_GRADE="good job, contact me @frozen6heart"
 export INPUT_URL="good job, contact me @frozen6heart"
