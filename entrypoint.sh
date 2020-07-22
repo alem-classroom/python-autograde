@@ -82,7 +82,7 @@ do
         send_result $API_KEY $GITHUB_ACTOR $LESSON_NAME-$TEST "done" "${result}"
     else
         printf "🚫 $LESSON_NAME-$TEST failed\n"
-        send_result $API_KEY $GITHUB_ACTOR $LESSON_NAME-$TEST "failed" "${result}""
+        send_result $API_KEY $GITHUB_ACTOR $LESSON_NAME-$TEST "failed" "${result}"
     fi
 
 done
