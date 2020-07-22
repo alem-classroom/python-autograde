@@ -59,11 +59,9 @@ z=$(find $TEST -mindepth 1 -maxdepth 1 -type d -name "test*" -print0 | xargs -n 
 
 send_result(){
     echo -e "${5}"
+    data=$(jq -aRs . <<< ${5})
     # apikey user lesson status logs 
-    curl -s -X POST "https://enrbmcya438b.x.pipedream.net" -H "x-grade-secret: ${1}" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"username\":\"${2}\", \"lesson\":\"${3}\", \"status\": \"${4}\", \"logs\": \"${5}\"}" > /dev/null
-    curl -d "${5}"\
-    -H "Content-Type: text/plain" \
-    https://enrbmcya438b.x.pipedream.net/
+    curl -s -X POST "https://enrbmcya438b.x.pipedream.net" -H "x-grade-secret: ${1}" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"username\":\"${2}\", \"lesson\":\"${3}\", \"status\": \"${4}\", \"logs\": \"${data}\"}" > /dev/null
 }
 
 pip install pytest > /dev/null
