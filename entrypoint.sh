@@ -65,6 +65,7 @@ do
     set +e
     result=$(pytest "$SOLUTION/$LESSON_NAME")
     last="$?"
+    echo "👾👾👾 debug" 
     echo $result
     set -e
     if [[ $last -eq 0 ]]; then
