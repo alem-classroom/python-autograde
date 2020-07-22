@@ -31,11 +31,9 @@ export INPUT_GRADE="good job, contact me @frozen6heart"
 export INPUT_URL="good job, contact me @frozen6heart"
 export INPUT_TOKEN="good job, contact me @frozen6heart"
 
-JOB=$(curl https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs )
-echo $JOB
+JOB=$(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs )
 ID=$(echo $JOB | jq '.jobs[0].id' )
-HEADSHA=$(echo $JOB | jq '.jobs[0].head_sha')
-LOGS_URL="https://github.com/alem-classroom/student-python-introduction-Zulbukharov/commit/$HEADSHA/checks/$ID/logs"
+LOGS_URL="https://github.com/alem-classroom/student-python-introduction-Zulbukharov/commit/$GITHUB_SHA/checks/$ID/logs"
 echo $LOGS_URL
 
 TEST=${COURSE_TEST_URL##*/test-}
@@ -61,7 +59,7 @@ z=$(find $TEST -mindepth 1 -maxdepth 1 -type d -name "test*" -print0 | xargs -n 
 
 send_result(){
     # apikey user lesson done 
-    curl -s -X POST "https://enrbmcya438b.x.pipedream.net" -H "x-grade-secret: ${1}" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"username\":\"${2}\", \"lesson\":\"${3}\", \"status\": \"${4}\", \"logs_url\": \"${LOGS_URL}\"}" > /dev/null
+    curl -s -X POST "https://lrn.dev/api/service/grade" -H "x-grade-secret: ${1}" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"username\":\"${2}\", \"lesson\":\"${3}\", \"status\": \"${4}\", \"logs_url\": \"${LOGS_URL}\"}" > /dev/null
 }
 
 pip install pytest > /dev/null
