@@ -27,6 +27,10 @@ API_KEY=$1
 COURSE_TEST_URL=$2
 USER_KEY=$3
 
+echo $GITHUB_SHA
+echo $GITHUB_RUN_ID
+echo "LOOOL"
+
 export INPUT_GRADE="good job, contact me @frozen6heart"
 export INPUT_URL="good job, contact me @frozen6heart"
 export INPUT_TOKEN="good job, contact me @frozen6heart"
