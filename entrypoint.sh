@@ -61,7 +61,7 @@ send_result(){
     echo -e "${5}"
     data=$(jq -aRs . <<< ${5})
     # apikey user lesson status logs 
-    curl -s -X POST "https://enrbmcya438b.x.pipedream.net" -H "x-grade-secret: ${1}" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"username\":\"${2}\", \"lesson\":\"${3}\", \"status\": \"${4}\", \"logs\": \"${data}\"}" > /dev/null
+    curl -s -X POST "https://enrbmcya438b.x.pipedream.net" -H "x-grade-secret: ${1}" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"username\":\"${2}\", \"lesson\":\"${3}\", \"status\": \"${4}\", \"logs\": ${data}}" > /dev/null
 }
 
 pip install pytest > /dev/null
