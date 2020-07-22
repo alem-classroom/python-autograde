@@ -58,10 +58,9 @@ find $TEST -type f -name '*test*' -print0 | xargs -n 1 -0 -I {} bash -c 'set -e;
 z=$(find $TEST -mindepth 1 -maxdepth 1 -type d -name "test*" -print0 | xargs -n 1 -0 -I {} bash -c 't={}; printf "${t##$0/test-}\n"' $TEST)
 
 send_result(){
-    echo -e "${5}"
     data=$(jq -aRs . <<< ${5})
     # apikey user lesson status logs 
-    curl -s -X POST "https://enrbmcya438b.x.pipedream.net" -H "x-grade-secret: ${1}" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"username\":\"${2}\", \"lesson\":\"${3}\", \"status\": \"${4}\", \"logs\": ${data}}" > /dev/null
+    curl -s -X POST "https://lrn.dev/api/service/grade" -H "x-grade-secret: ${1}" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"username\":\"${2}\", \"lesson\":\"${3}\", \"status\": \"${4}\", \"logs\": ${data}}" > /dev/null
 }
 
 pip install pytest > /dev/null
@@ -73,7 +72,6 @@ do
     result=$(pytest "$SOLUTION/$LESSON_NAME")
     last="$?"
     echo "${result}"
-    echo "ok"
     set -e
     if [[ $last -eq 0 ]]; then
         printf "✅ $LESSON_NAME-$TEST passed\n"
