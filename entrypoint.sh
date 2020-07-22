@@ -21,7 +21,7 @@
 # test-variables-and-types
 #  - hello_test.py
 
-set -ue
+set -uev
 
 API_KEY=$1
 COURSE_TEST_URL=$2
