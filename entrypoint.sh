@@ -53,10 +53,10 @@ z=$(find $TEST -mindepth 1 -maxdepth 1 -type d -name "test*" -print0 | xargs -n 
 
 send_result(){
     # apikey user lesson status logs
-    curl -s -X POST "https://lrn.dev/api/service/grade" -H "x-grade-secret: ${1}" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"username\":\"${2}\", \"lesson\":\"${3}\", \"status\": \"${4}\", \"logs\": \"${5}\"}" > /dev/null
+    curl -X POST "https://lrn.dev/api/service/grade" -H "x-grade-secret: ${1}" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"username\":\"${2}\", \"lesson\":\"${3}\", \"status\": \"${4}\", \"logs\": \"${5}\"}"
 }
 
-pip install pytest > /dev/null
+o=$(pip install pytest > /dev/null)
 
 for LESSON_NAME in $z
 do
