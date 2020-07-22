@@ -11,7 +11,7 @@
 # send result to the api with lesson name, course name, username
 
 # GITHUB_REPOSITORY = url to the repo 
-# GITHUB_REPOSITORY_OWNER = username
+# GITHUB_ACTOR = username
 
 # python-introduction-template
 # variables-and-types
@@ -27,17 +27,14 @@ API_KEY=$1
 COURSE_TEST_URL=$2
 USER_KEY=$3
 
-echo $GITHUB_SHA
-echo $GITHUB_RUN_ID
-echo "LOOOL"
-echo $GITHUB_RUN_NUMBER "run number"
-echo $GITHUB_JOB "job"
-env
-
-
 export INPUT_GRADE="good job, contact me @frozen6heart"
 export INPUT_URL="good job, contact me @frozen6heart"
 export INPUT_TOKEN="good job, contact me @frozen6heart"
+
+JOB=$(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/jobs > /dev/null)
+ID=$(echo $JOB | jq '.jobs[0].id' )
+HEADSHA=$(echo $JOB | jq '.jobs[0].head_sha')
+LOGS_URL="https://github.com/alem-classroom/student-python-introduction-Zulbukharov/commit/${HEADSHA}/checks/${ID}/logs"
 
 TEST=${COURSE_TEST_URL##*/test-}
 TEST_FULL="$TEST/test-"
@@ -62,7 +59,7 @@ z=$(find $TEST -mindepth 1 -maxdepth 1 -type d -name "test*" -print0 | xargs -n 
 
 send_result(){
     # apikey user lesson done 
-    curl -s -X POST "https://lrn.dev/api/service/grade" -H "x-grade-secret: ${1}" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"username\":\"${2}\", \"lesson\":\"${3}\", \"status\": \"${4}\"}" > /dev/null
+    curl -s -X POST "https://lrn.dev/api/service/grade" -H "x-grade-secret: ${1}" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"username\":\"${2}\", \"lesson\":\"${3}\", \"status\": \"${4}\", \"logs_url\": \"${LOGS_URL}\"}" > /dev/null
 }
 
 pip install pytest > /dev/null
@@ -80,6 +77,7 @@ do
         send_result $API_KEY $GITHUB_ACTOR $LESSON_NAME-$TEST "done"
     else
         printf "🚫 $LESSON_NAME-$TEST failed\n"
+        send_result $API_KEY $GITHUB_ACTOR $LESSON_NAME-$TEST "failed"
     fi
 
 done
