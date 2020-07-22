@@ -39,6 +39,7 @@ TEST=${COURSE_TEST_URL##*/test-}
 TEST_FULL="$TEST/test-"
 SOLUTION="solution"
 
+
 SOLUTION_URL="https://github.com/${GITHUB_REPOSITORY}"
 TEST_URL="https://$USER_KEY@github.com/${COURSE_TEST_URL}"
 
