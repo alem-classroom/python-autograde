@@ -21,7 +21,7 @@
 # test-variables-and-types
 #  - hello_test.py
 
-set -uev
+set -ue
 
 API_KEY=$1
 COURSE_TEST_URL=$2
@@ -52,28 +52,25 @@ find $TEST -type f -name '*test*' -print0 | xargs -n 1 -0 -I {} bash -c 'set -e;
 z=$(find $TEST -mindepth 1 -maxdepth 1 -type d -name "test*" -print0 | xargs -n 1 -0 -I {} bash -c 't={}; printf "${t##$0/test-}\n"' $TEST)
 
 send_result(){
-    # apikey user lesson status logs
-    curl -X POST "https://lrn.dev/api/service/grade" -H "x-grade-secret: ${1}" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"username\":\"${2}\", \"lesson\":\"${3}\", \"status\": \"${4}\", \"logs\": \"${5}\"}"
+    # apikey user lesson done 
+    curl -s -X POST "https://lrn.dev/api/service/grade" -H "x-grade-secret: ${1}" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"username\":\"${2}\", \"lesson\":\"${3}\", \"status\": \"${4}\"}" > /dev/null
 }
 
-o=$(pip install pytest > /dev/null)
+pip install pytest > /dev/null
 
 for LESSON_NAME in $z
 do
 
     # pip install -r "$SOLUTION/$LESSON_NAME/requirements.txt"
     set +e
-    result=$(pytest "$SOLUTION/$LESSON_NAME")
+    pytest "$SOLUTION/$LESSON_NAME"
     last="$?"
-    echo "👾👾👾 debug" 
-    echo $result
     set -e
     if [[ $last -eq 0 ]]; then
         printf "✅ $LESSON_NAME-$TEST passed\n"
-        send_result $API_KEY $GITHUB_ACTOR $LESSON_NAME-$TEST "done" $result
+        send_result $API_KEY $GITHUB_ACTOR $LESSON_NAME-$TEST "done"
     else
         printf "🚫 $LESSON_NAME-$TEST failed\n"
-        send_result $API_KEY $GITHUB_ACTOR $LESSON_NAME-$TEST "failed" $result
     fi
 
 done
