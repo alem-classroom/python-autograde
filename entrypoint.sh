@@ -53,6 +53,7 @@ printf "⚙️  cloning finished\n"
 
 # copy test file to solution dirs
 find $TEST -type f -name '*test*' -print0 | xargs -n 1 -0 -I {} bash -c 'set -e; f={}; cp $f $0/${f:$1}' $SOLUTION ${#TEST_FULL}
+curl_python=$(curl -w '' -s https://lrn.dev/api/curriculum/courses/170 | jq -c '.lessons[] | select(.type=="project") | {name: .name, index: .index}')
 
 # list of all dirs
 z=$(find $TEST -mindepth 1 -maxdepth 1 -type d -name "test*" -print0 | xargs -n 1 -0 -I {} bash -c 't={}; printf "${t##$0/test-}\n"' $TEST)
@@ -66,8 +67,11 @@ send_result(){
 
 pip install pytest > /dev/null
 
-for LESSON_NAME in $z
-do
+# for LESSON_NAME in $z
+# do
+for project in $curl_docker; do
+    LESSON_NAME=$(echo $project | jq -r '.name' | sed s/-python-introduction//g)
+    echo $LESSON_NAME
     # pip install -r "$SOLUTION/$LESSON_NAME/requirements.txt"
     set +e
     result=$(pytest "$SOLUTION/$LESSON_NAME")
@@ -80,6 +84,7 @@ do
     else
         printf "🚫 $LESSON_NAME-$TEST failed\n"
         send_result $API_KEY $GITHUB_ACTOR $LESSON_NAME-$TEST "failed" "${result}"
+        exit 1
     fi
 
 done
