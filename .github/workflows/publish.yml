@@ -16,6 +16,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v1
-          release_name: Release v1
+          tag_name: v2
+          release_name: Release v2
           body: python-autograde
