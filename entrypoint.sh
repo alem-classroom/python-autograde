@@ -69,7 +69,7 @@ pip install pytest > /dev/null
 
 # for LESSON_NAME in $z
 # do
-for project in $curl_docker; do
+for project in $curl_python; do
     LESSON_NAME=$(echo $project | jq -r '.name' | sed s/-python-introduction//g)
     echo $LESSON_NAME
     # pip install -r "$SOLUTION/$LESSON_NAME/requirements.txt"
