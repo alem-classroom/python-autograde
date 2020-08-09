@@ -44,16 +44,14 @@ SOLUTION="solution"
 SOLUTION_URL="https://github.com/${GITHUB_REPOSITORY}"
 TEST_URL="https://$USER_KEY@github.com/${COURSE_TEST_URL}"
 
-printf "📝 hello $GITHUB_ACTOR\n"
+printf "📝 hello $GITHUB_ACTOR!\n"
 printf "⚙️  building enviroment\n"
 printf "⚙️  cloning solutions\n"
 git clone $SOLUTION_URL $SOLUTION
 git clone $TEST_URL $TEST
 printf "⚙️  cloning finished\n"
 
-# copy test file to solution dirs
-find $TEST -type f -name '*test*' -print0 | xargs -n 1 -0 -I {} bash -c 'set -e; f={}; cp $f $0/${f:$1}' $SOLUTION ${#TEST_FULL}
-
+curl_python=""
 if [[ $TEST = "python-introduction" ]]; then
     curl_python=$(curl -w '' -s https://lrn.dev/api/curriculum/courses/170 | jq -c '.lessons[] | select(.type=="project") | {name: .name, index: .index}')
 else
@@ -61,6 +59,9 @@ else
 fi
 printf "$TEST\n"
 printf "$curl_python\n"
+
+# copy test file to solution dirs
+find $TEST -type f -name '*test*' -print0 | xargs -n 1 -0 -I {} bash -c 'set -e; f={}; cp $f $0/${f:$1}' $SOLUTION ${#TEST_FULL}
 # curl_python=$(curl -w '' -s https://lrn.dev/api/curriculum/courses/170 | jq -c '.lessons[] | select(.type=="project") | {name: .name, index: .index}')
 
 # list of all dirs
