@@ -59,7 +59,8 @@ if [[ $TEST = "python-introduction" ]]; then
 else
     curl_python=$(curl -w '' -s https://lrn.dev/api/curriculum/courses/159 | jq -c '.lessons[] | select(.type=="project") | {name: .name, index: .index}')
 fi
-echo $curl_python
+printf "$TEST\n"
+printf "$curl_python\n"
 # curl_python=$(curl -w '' -s https://lrn.dev/api/curriculum/courses/170 | jq -c '.lessons[] | select(.type=="project") | {name: .name, index: .index}')
 
 # list of all dirs
