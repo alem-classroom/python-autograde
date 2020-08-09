@@ -53,7 +53,13 @@ printf "⚙️  cloning finished\n"
 
 # copy test file to solution dirs
 find $TEST -type f -name '*test*' -print0 | xargs -n 1 -0 -I {} bash -c 'set -e; f={}; cp $f $0/${f:$1}' $SOLUTION ${#TEST_FULL}
-curl_python=$(curl -w '' -s https://lrn.dev/api/curriculum/courses/170 | jq -c '.lessons[] | select(.type=="project") | {name: .name, index: .index}')
+
+if [[ $GITHUB_REPOSITORY =~ "python-introduction" ]]; then
+    curl_python=$(curl -w '' -s https://lrn.dev/api/curriculum/courses/170 | jq -c '.lessons[] | select(.type=="project") | {name: .name, index: .index}')
+else
+    curl_python=$(curl -w '' -s https://lrn.dev/api/curriculum/courses/159 | jq -c '.lessons[] | select(.type=="project") | {name: .name, index: .index}')
+fi
+# curl_python=$(curl -w '' -s https://lrn.dev/api/curriculum/courses/170 | jq -c '.lessons[] | select(.type=="project") | {name: .name, index: .index}')
 
 # list of all dirs
 z=$(find $TEST -mindepth 1 -maxdepth 1 -type d -name "test*" -print0 | xargs -n 1 -0 -I {} bash -c 't={}; printf "${t##$0/test-}\n"' $TEST)
@@ -70,7 +76,7 @@ pip install pytest > /dev/null
 # for LESSON_NAME in $z
 # do
 for project in $curl_python; do
-    LESSON_NAME=$(echo $project | jq -r '.name' | sed s/-python-introduction//g)
+    LESSON_NAME=$(echo $project | jq -r '.name' | sed s/-python-introduction//g | sed s/-algo-and-data-structures//g)
     echo $LESSON_NAME
     # pip install -r "$SOLUTION/$LESSON_NAME/requirements.txt"
     set +e
