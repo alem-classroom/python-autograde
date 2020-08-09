@@ -54,11 +54,12 @@ printf "⚙️  cloning finished\n"
 # copy test file to solution dirs
 find $TEST -type f -name '*test*' -print0 | xargs -n 1 -0 -I {} bash -c 'set -e; f={}; cp $f $0/${f:$1}' $SOLUTION ${#TEST_FULL}
 
-if [[ $GITHUB_REPOSITORY =~ "python-introduction" ]]; then
+if [[ $TEST = "python-introduction" ]]; then
     curl_python=$(curl -w '' -s https://lrn.dev/api/curriculum/courses/170 | jq -c '.lessons[] | select(.type=="project") | {name: .name, index: .index}')
 else
     curl_python=$(curl -w '' -s https://lrn.dev/api/curriculum/courses/159 | jq -c '.lessons[] | select(.type=="project") | {name: .name, index: .index}')
 fi
+echo $curl_python
 # curl_python=$(curl -w '' -s https://lrn.dev/api/curriculum/courses/170 | jq -c '.lessons[] | select(.type=="project") | {name: .name, index: .index}')
 
 # list of all dirs
