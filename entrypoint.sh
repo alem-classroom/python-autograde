@@ -44,12 +44,13 @@ SOLUTION="solution"
 SOLUTION_URL="https://github.com/${GITHUB_REPOSITORY}"
 TEST_URL="https://$USER_KEY@github.com/${COURSE_TEST_URL}"
 
-printf "📝 hello $GITHUB_ACTOR\n"
+printf "📝 hello $GITHUB_ACTOR!\n"
 printf "⚙️  building enviroment\n"
 printf "⚙️  cloning solutions\n"
 git clone $SOLUTION_URL $SOLUTION
 git clone $TEST_URL $TEST
 printf "⚙️  cloning finished\n"
+
 
 # copy test file to solution dirs
 find $TEST -type f -name '*test*' -print0 | xargs -n 1 -0 -I {} bash -c 'set -e; f={}; cp $f $0/${f:$1}' $SOLUTION ${#TEST_FULL}
@@ -66,10 +67,8 @@ send_result(){
 
 pip install pytest > /dev/null
 
-# for LESSON_NAME in $z
-# do
 for project in $curl_course; do
-    LESSON_NAME=$(echo $project | jq -r '.name' | sed s/-python-introduction//g)
+    LESSON_NAME=$(echo $project | jq -r '.name' | sed s/-$TEST//g)
     echo $LESSON_NAME
     # pip install -r "$SOLUTION/$LESSON_NAME/requirements.txt"
     set +e
